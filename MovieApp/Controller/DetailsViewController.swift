@@ -23,16 +23,16 @@ class DetailsViewController: UIViewController {
     let loadMoviesDetails = MovieListLoader()
     var movieInformationArray = [DetailsCell]()
     @IBOutlet weak var poster: UIImageView?
-    @IBOutlet weak var favouriteButton: UIButton!
+    @IBOutlet weak var favouriteButton: UIButton?
     @IBOutlet weak var tableView: UITableView?
     @IBAction func favouriteButtonAction(_ sender: Any) {
 //        on click of button, if movie was liked, unlike movie i.e change heart fill icon to empty heart icon, then remove that movie from the offline storage(realm) else like movie and change icon t heart fill and add the movie to realm
         if favorite == true {
-            favouriteButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
+            favouriteButton?.setImage(UIImage(systemName: "suit.heart"), for: .normal)
             favorite = false
             deleteFromRealm()
         } else {
-            favouriteButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
+            favouriteButton?.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
             favorite = true
             saveToRealm()
         }
@@ -50,8 +50,8 @@ class DetailsViewController: UIViewController {
     func initialSetup() {
 //        if movie is saved, show a heart filled icon else show an empty heart icon. Also populate the different data from realm and api
         if favorite == true {
-            favouriteButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
-        } else { favouriteButton.setImage(UIImage(systemName: "suit.heart"), for: .normal) }
+            favouriteButton?.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
+        } else { favouriteButton?.setImage(UIImage(systemName: "suit.heart"), for: .normal) }
         if populateDataFrom == PopulateDataFrom.api {
             loadMoviesDetails.getMovieDetails(id: movieId ?? "")
             poster?.downloaded(from: posterUrl ?? "")

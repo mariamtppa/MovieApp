@@ -13,8 +13,8 @@ class MovieListViewController: UIViewController, UISearchBarDelegate {
     var movieList: [Movie]?
     let realmStorage = RealmStorage()
     let loadMovies = MovieListLoader()
-    @IBOutlet weak var searchField: UITextField!
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchField: UITextField?
+    @IBOutlet weak var tableView: UITableView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +35,7 @@ class MovieListViewController: UIViewController, UISearchBarDelegate {
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-        loadMovies.getMovies(movieName: searchField.text ?? "")
+        loadMovies.getMovies(movieName: searchField?.text ?? "")
     }
 }
 
@@ -52,7 +52,9 @@ extension MovieListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "MovieListTableViewCell", for: indexPath) as? MovieListTableViewCell {
-            cell.setup(movie: (movieList?[indexPath.row])!)
+            if let movie = movieList?[indexPath.row] {
+                cell.setup(movie: movie)
+            }
             cell.selectionStyle = .none
             return cell
         }
@@ -79,7 +81,7 @@ extension MovieListViewController: GetMovieList {
         //reload table view only when there is a search result
         if self.movieList != nil {
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self.tableView?.reloadData()
             }
         }
     }

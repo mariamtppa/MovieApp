@@ -10,7 +10,7 @@ import UIKit
 class MovieDetailsTableViewCell: UITableViewCell {
 
     @IBOutlet weak var header: UILabel?
-    @IBOutlet weak var content: UILabel!
+    @IBOutlet weak var content: UILabel?
     override func awakeFromNib() {
         super.awakeFromNib()
     }

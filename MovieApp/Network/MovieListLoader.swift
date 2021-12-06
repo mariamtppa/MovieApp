@@ -14,7 +14,8 @@ class MovieListLoader {
     func getMovies(movieName: String) {
 //        api call to get the brief movie information displayed in the list
         let url = "https://www.omdbapi.com/?S=\(movieName)&apikey=b8acaf2f"
-        let task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { data, response, error in
+        let defaultUrl = "https://www.omdbapi.com/?S=batman)&apikey=b8acaf2f"
+        let task = URLSession.shared.dataTask(with: (URL(string: url) ?? URL(string: defaultUrl))!, completionHandler: { data, response, error in
             guard let data = data, error == nil else {
                 print("something went wrong")
                 return

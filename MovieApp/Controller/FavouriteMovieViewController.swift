@@ -14,7 +14,7 @@ class FavouriteMovieViewController: UIViewController {
     var selectedMovie: SavedMovie?
     let realmStorage = RealmStorage()
     var favouriteMovies: Results<FavouriteMovie>?
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableView: UITableView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +36,7 @@ class FavouriteMovieViewController: UIViewController {
         super.viewWillAppear(true)
         favouriteMovies = RealmStorage().retrieveFavoriteMovies()
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            self.tableView?.reloadData()
         }
     }
     

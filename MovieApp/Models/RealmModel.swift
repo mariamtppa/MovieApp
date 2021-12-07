@@ -10,15 +10,14 @@ import RealmSwift
 
 class FavouriteMovie: Object {
     @objc dynamic var id = 0
-    let fav = true
-    let movieInfo = List<FavMovie>()
-    @objc dynamic var picture: Data? = nil
+    let favMovieInformationList = List<FavMovieInformation>()
+    @objc dynamic var poster: Data? = nil
     override static func primaryKey() -> String? {
         return "id"
     }
 }
 
-class FavMovie: Object {
+class FavMovieInformation: Object {
     @objc dynamic var header: String?
     @objc dynamic var content: String?
 }

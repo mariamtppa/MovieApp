@@ -65,9 +65,9 @@ extension MovieListViewController: UITableViewDataSource {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let destinationViewController = storyBoard.instantiateViewController(withIdentifier: "DetailsScreen") as? DetailsViewController
         destinationViewController?.movieId = movieList?[indexPath.row].imdbID ?? ""
-        let movieIsInRealm = movieList?[indexPath.row]
-        let id = Int(movieIsInRealm?.imdbID.dropFirst(2) ?? Substring()) ?? 0
-        destinationViewController?.favorite = realmStorage.movieIsSaved(id: id)
+        let movie = movieList?[indexPath.row]
+        let movieId = Int(movie?.imdbID.dropFirst(2) ?? Substring()) ?? 0
+        destinationViewController?.movieIsAfavorite = realmStorage.movieIsSaved(id: movieId)
         destinationViewController?.posterUrl = movieList?[indexPath.row].poster ?? ""
         destinationViewController?.populateDataFrom = .api
         self.navigationController?.pushViewController(destinationViewController ?? DetailsViewController(), animated: true)

@@ -35,7 +35,7 @@ struct Movie: Codable {
 }
 
 struct SavedMovie {
-    var image: Data
+    var poster: Data
     var title: String
     var type: String
     var year: String

@@ -11,7 +11,6 @@ import RealmSwift
 class FavouriteMovieViewController: UIViewController {
     
     var movieID = ""
-    var selectedMovie: SavedMovie?
     let realmStorage = RealmStorage()
     var favouriteMovies: Results<FavouriteMovie>?
     @IBOutlet weak var tableView: UITableView?
@@ -40,31 +39,31 @@ class FavouriteMovieViewController: UIViewController {
         }
     }
     
-    func getDataToPopulateList(imageData: Data, infoList: List<FavMovie>) -> SavedMovie {
+    func getSpecificDataNeededToPopulateFavoriteMovieList(posterImageData: Data, savedMovieInformationList: List<FavMovieInformation>) -> SavedMovie {
         //        convert realm movie object to table view cell object to populate the table view on list page
         var title = ""; var year = ""; var type = ""
-        for fav in infoList {
-            if fav.header == "Title" {
-                title = fav.content ?? ""
+        for movieInformation in savedMovieInformationList {
+            if movieInformation.header == "Title" {
+                title = movieInformation.content ?? ""
             }
-            if fav.header == "Type" {
-                type = fav.content ?? ""
+            if movieInformation.header == "Type" {
+                type = movieInformation.content ?? ""
             }
-            if fav.header == "Year" {
-                year = fav.content ?? ""
+            if movieInformation.header == "Year" {
+                year = movieInformation.content ?? ""
             }
-            if fav.header == "ImdbID" {
-                movieID = fav.content ?? ""
+            if movieInformation.header == "ImdbID" {
+                movieID = movieInformation.content ?? ""
             }
         }
-        return SavedMovie(image: imageData, title: title, type: type, year: year)
+        return SavedMovie(poster: posterImageData, title: title, type: type, year: year)
     }
     
-    func convertRealmDataToTableViewCellData(movieList: List<FavMovie>) -> [DetailsCell] {
+    func convertRealmDataToTableViewCellDataForMovieDetailsList(favoriteMovieInformationList: List<FavMovieInformation>) -> [DetailsCell] {
         //        convert realm movie object to table view cell object to populate the table view on details page
         var movieInformationArray = [DetailsCell]()
-        for movie in movieList {
-            movieInformationArray.append(DetailsCell(header: movie.header ?? "", description: movie.content ?? ""))
+        for movieInformation in favoriteMovieInformationList {
+            movieInformationArray.append(DetailsCell(header: movieInformation.header ?? "", description: movieInformation.content ?? ""))
         }
         return movieInformationArray
     }
@@ -83,9 +82,9 @@ extension FavouriteMovieViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteMovieTableViewCell", for: indexPath) as? MovieListTableViewCell {
-            let movie = favouriteMovies?[indexPath.row].movieInfo
-            selectedMovie = getDataToPopulateList(imageData: favouriteMovies?[indexPath.row].picture ?? Data(), infoList: movie!)
-            cell.setupFromRealm(movie: selectedMovie!)
+            let movie = favouriteMovies?[indexPath.row].favMovieInformationList
+            let movieListData = getSpecificDataNeededToPopulateFavoriteMovieList(posterImageData: favouriteMovies?[indexPath.row].poster ?? Data(), savedMovieInformationList: movie!)
+            cell.setupFromRealm(movie: movieListData)
             cell.selectionStyle = .none
             return cell
         }
@@ -97,10 +96,10 @@ extension FavouriteMovieViewController: UITableViewDataSource {
         let destinationViewController = storyBoard.instantiateViewController(withIdentifier: "DetailsScreen") as? DetailsViewController
         destinationViewController?.movieId = movieID
         destinationViewController?.populateDataFrom = .realm
-        destinationViewController?.posterImageData = favouriteMovies?[indexPath.row].picture
-        destinationViewController?.movieInformationArray = convertRealmDataToTableViewCellData(movieList: (favouriteMovies?[indexPath.row].movieInfo)!)
-        let id = Int(movieID.dropFirst(2)) ?? 0
-        destinationViewController?.favorite = realmStorage.movieIsSaved(id: id)
+        destinationViewController?.posterImageData = favouriteMovies?[indexPath.row].poster
+        destinationViewController?.movieInformationArray = convertRealmDataToTableViewCellDataForMovieDetailsList(favoriteMovieInformationList: (favouriteMovies?[indexPath.row].favMovieInformationList)!)
+        let movieId = Int(movieID.dropFirst(2)) ?? 0
+        destinationViewController?.movieIsAfavorite = realmStorage.movieIsSaved(id: movieId)
         self.navigationController?.pushViewController(destinationViewController ?? DetailsViewController(), animated: true)
     }
 }

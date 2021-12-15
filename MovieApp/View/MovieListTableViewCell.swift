@@ -26,7 +26,7 @@ class MovieListTableViewCell: UITableViewCell {
     
     func setupFromRealm(movie: SavedMovie) {
         //       assigns values to the table view cell components from data gotten retrived from realm
-        poster?.image = UIImage(data: movie.poster)
+        poster?.downloaded(from: movie.poster)
         titleLabel?.text = movie.title
         yearLabel?.text = movie.year
         typeLabel?.text = movie.type

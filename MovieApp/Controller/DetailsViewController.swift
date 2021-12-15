@@ -16,7 +16,6 @@ class DetailsViewController: UIViewController {
         
     var movieId: String?
     var posterUrl: String?
-    var posterImageData: Data?
     var movieIsAfavorite = false
     let realmStorage = RealmStorage()
     var populateDataFrom: PopulateDataFrom?
@@ -55,11 +54,8 @@ class DetailsViewController: UIViewController {
         } else { favouriteButton?.setImage(UIImage(systemName: "suit.heart"), for: .normal) }
         if populateDataFrom == PopulateDataFrom.api {
             loadMoviesDetails.getMovieDetails(id: movieId ?? "")
-            poster?.downloaded(from: posterUrl ?? "")
         }
-        if populateDataFrom == PopulateDataFrom.realm {
-            poster?.image = UIImage(data: posterImageData ?? Data())
-        }
+        poster?.downloaded(from: posterUrl ?? "")
     }
     
     private func registerTableViewCell() {
@@ -90,7 +86,7 @@ class DetailsViewController: UIViewController {
     func saveToRealm() {
 //        converts movie object to realm object, uses imdbID as primary key for database query ease then add list of favorite movies to realm and updates favorite list
         let favoriteMovie = FavouriteMovie()
-        favoriteMovie.poster = populateDataFrom == PopulateDataFrom.api ? poster?.image?.pngData() : posterImageData
+        favoriteMovie.poster = posterUrl
         favoriteMovie.id = Int(movieId?.dropFirst(2) ?? Substring()) ?? 0
         for i in 0..<movieInformationArray.count {
             let movieInformation = FavMovieInformation()
